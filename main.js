@@ -1,5 +1,6 @@
 const gameArea = document.getElementById("game-area");
 const scoreDisplay = document.getElementById("score");
+const gameContainer = document.getElementById("game-container");
 const highScoreDisplay = document.getElementById("high-score");
 const timePlayedDisplay = document.getElementById("time-played");
 const backgroundMusic = document.getElementById("background-music");
@@ -30,7 +31,7 @@ function startGame() {
   console.log("Background music could not be played:", error);
  });
 
- gameInterval = setInterval(createZombie, 800);
+ gameInterval = setInterval(createZombie, 100);
  timerInterval = setInterval(() => {
   timePlayed++;
   updateTimePlayed();
@@ -190,6 +191,7 @@ function gameOver() {
  gameOverSound.play();
  stopGame();
  gameArea.style.display = "none";
+ gameContainer.style.marginTop = "100px";
  gameOverScreen.style.display = "block";
  finalScoreDisplay.textContent = score;
  toggleButtons(true);

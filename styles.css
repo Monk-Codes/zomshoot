@@ -28,6 +28,7 @@ body {
  max-width: 800px;
  margin-bottom: 10px;
  font-size: 18px;
+ padding: 10px;
 }
 
 #game-area {
@@ -84,7 +85,7 @@ button:hover {
 #game-over-screen {
  display: none;
  position: absolute;
- top: 20%;
+ top: 25%;
  left: 50%;
  transform: translate(-50%, -50%);
  background-color: rgba(0, 0, 0, 0.8);
