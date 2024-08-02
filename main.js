@@ -5,7 +5,12 @@ const timePlayedDisplay = document.getElementById("time-played");
 const backgroundMusic = document.getElementById("background-music");
 const zombieAppearSound = document.getElementById("zombie-appear-sound");
 const zombieKillSound = document.getElementById("zombie-kill-sound");
+const gameOverSound = document.getElementById("game-over-sound");
 const restartBtn = document.getElementById("restart-btn");
+const gameOverScreen = document.getElementById("game-over-screen");
+const finalScoreDisplay = document.getElementById("final-score");
+const playAgainBtn = document.getElementById("play-again-btn");
+const startBtn = document.getElementById("start-btn");
 
 let score = 0;
 let highScore = localStorage.getItem("highScore") || 0;
@@ -21,13 +26,17 @@ function startGame() {
  timePlayed = 0;
  updateScore();
  updateTimePlayed();
- backgroundMusic.play();
+ backgroundMusic.play().catch((error) => {
+  console.log("Background music could not be played:", error);
+ });
 
- gameInterval = setInterval(createZombie, 1100);
+ gameInterval = setInterval(createZombie, 800);
  timerInterval = setInterval(() => {
   timePlayed++;
   updateTimePlayed();
  }, 1000);
+
+ toggleButtons(false);
 }
 
 // Stop the game
@@ -37,6 +46,15 @@ function stopGame() {
  backgroundMusic.pause();
  backgroundMusic.currentTime = 0;
  saveHighScore();
+ clearZombies();
+}
+
+// Clear all zombies from the game area
+function clearZombies() {
+ const zombies = gameArea.getElementsByClassName("zombie");
+ while (zombies.length > 0) {
+  zombies[0].parentNode.removeChild(zombies[0]);
+ }
 }
 
 // Restart the game
@@ -45,11 +63,32 @@ restartBtn.addEventListener("click", () => {
  startGame();
 });
 
+// Play Again button interaction
+playAgainBtn.addEventListener("click", () => {
+ gameOverScreen.style.display = "none";
+ gameArea.style.display = "block";
+ stopGame();
+
+ startGame();
+});
+
+// Start Game Button Interaction
+startBtn.addEventListener("click", () => {
+ startBtn.style.display = "none";
+ startGame();
+});
+
+// Toggle visibility of Start and Restart buttons
+function toggleButtons(isStartVisible) {
+ startBtn.style.display = isStartVisible ? "block" : "none";
+ restartBtn.style.display = isStartVisible ? "none" : "block";
+}
+
 // Create a zombie
 function createZombie() {
  const zombie = document.createElement("div");
  zombie.className = "zombie";
- const zombieSize = Math.random() * 90 + 40;
+ const zombieSize = Math.random() * 50 + 40;
  zombie.style.width = `${zombieSize}px`;
  zombie.style.height = `${zombieSize}px`;
  const xPos = Math.random() * (gameArea.offsetWidth - zombieSize);
@@ -58,7 +97,9 @@ function createZombie() {
  zombie.style.top = `${yPos}px`;
  gameArea.appendChild(zombie);
 
- zombieAppearSound.play();
+ zombieAppearSound.play().catch((error) => {
+  console.log("Zombie appear sound could not be played:", error);
+ });
 
  // Animate zombie appearance
  gsap.fromTo(zombie, { scale: 0, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.8 });
@@ -76,25 +117,29 @@ function createZombie() {
  // Remove zombie when hit
  zombie.addEventListener("click", () => {
   if (gameArea.contains(zombie)) {
-   zombieKillSound.play();
+   zombieKillSound.play().catch((error) => {
+    console.log("Zombie kill sound could not be played:", error);
+   });
    gsap.to(zombie, {
     scale: 0,
     opacity: 0,
     duration: 0.2,
     onComplete: () => {
-     gameArea.removeChild(zombie);
-     updateScore();
+     if (gameArea.contains(zombie)) {
+      gameArea.removeChild(zombie);
+      updateScore();
+     }
     },
    });
   }
  });
 
- // Remove zombie after a few seconds if not clicked
+ // Check for game over condition
  setTimeout(() => {
   if (gameArea.contains(zombie)) {
-   gameArea.removeChild(zombie);
+   checkGameOver();
   }
- }, 50000); // Zombies stay for 5 seconds
+ }, 30000);
 }
 
 // Update score
@@ -109,12 +154,45 @@ function updateScore() {
 
 // Update time played
 function updateTimePlayed() {
- timePlayedDisplay.textContent = `Time Played: ${timePlayed}s`;
+ const minutes = Math.floor(timePlayed / 60);
+ const seconds = timePlayed % 60;
+ timePlayedDisplay.textContent = `Time Played: ${minutes}m ${seconds}s`;
 }
 
 // Save high score to localStorage
 function saveHighScore() {
  localStorage.setItem("highScore", highScore);
+}
+
+// Check for game over condition
+function checkGameOver() {
+ const zombieCount = gameArea.getElementsByClassName("zombie").length;
+ const areaWidth = gameArea.offsetWidth;
+ const areaHeight = gameArea.offsetHeight;
+ const totalArea = areaWidth * areaHeight;
+ let occupiedArea = 0;
+
+ Array.from(gameArea.getElementsByClassName("zombie")).forEach((zombie) => {
+  const width = parseFloat(zombie.style.width);
+  const height = parseFloat(zombie.style.height);
+  occupiedArea += width * height;
+ });
+
+ const occupiedPercentage = (occupiedArea / totalArea) * 100;
+
+ if (occupiedPercentage > 90) {
+  gameOver();
+ }
+}
+
+// Game over function
+function gameOver() {
+ gameOverSound.play();
+ stopGame();
+ gameArea.style.display = "none";
+ gameOverScreen.style.display = "block";
+ finalScoreDisplay.textContent = score;
+ toggleButtons(true);
 }
 
 // Info and Help buttons
@@ -125,6 +203,3 @@ document.getElementById("info-btn").addEventListener("click", () => {
 document.getElementById("help-btn").addEventListener("click", () => {
  alert("Zombies appear randomly. Click or tap on them to score. Good luck!");
 });
-
-// Start the game initially
-startGame();

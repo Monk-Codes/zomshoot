@@ -15,12 +15,19 @@
     <div id="high-score">High Score: 0</div>
     <div id="time-played">Time Played: 0s</div>
    </div>
-   <div id="game-area"></div>
+   <div id="game-area">
+    <button id="start-btn">Start Game</button>
+   </div>
    <div id="controls">
+    <button id="restart-btn">Restart</button>
     <button id="info-btn">Info</button>
     <button id="help-btn">Help</button>
-    <button id="restart-btn">Restart</button>
    </div>
+  </div>
+  <div id="game-over-screen">
+   <h2>Game Over!</h2>
+   <p>Your final score is: <span id="final-score">0</span></p>
+   <button id="play-again-btn">Play Again</button>
   </div>
   <audio id="background-music" loop>
    <source src="./assets/bgmusic.mp3" type="audio/mpeg" />
@@ -30,6 +37,9 @@
   </audio>
   <audio id="zombie-kill-sound">
    <source src="./assets/zomkill.mp3" type="audio/mpeg" />
+  </audio>
+  <audio id="game-over-sound">
+   <source src="./assets/gameover.mp3" type="audio/mpeg" />
   </audio>
   <script src="main.js"></script>
  </body>

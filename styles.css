@@ -47,7 +47,14 @@ body {
  display: flex;
  gap: 10px;
 }
-
+#start-btn {
+ width: 100%;
+ height: 100%;
+ display: flex;
+ align-items: center;
+ justify-content: center;
+ text-align: center;
+}
 button {
  padding: 10px 20px;
  font-size: 16px;
@@ -64,14 +71,51 @@ button:hover {
 }
 
 .zombie {
- width: 50px;
- height: 50px;
- background: url("zombie.svg") no-repeat center center;
- background-size: cover;
+ width: 150px;
+ height: 200px;
+ background: url("./assets/zm.svg") no-repeat fixed center center;
+ background-size: contain;
  position: absolute;
  cursor: pointer;
  transition: transform 0.2s ease, opacity 0.2s ease;
  z-index: 10;
+}
+
+#game-over-screen {
+ display: none;
+ position: absolute;
+ top: 20%;
+ left: 50%;
+ transform: translate(-50%, -50%);
+ background-color: rgba(0, 0, 0, 0.8);
+ padding: 30px;
+ border-radius: 10px;
+ text-align: center;
+ color: white;
+}
+
+#game-over-screen h2 {
+ margin: 0;
+ font-size: 32px;
+}
+
+#game-over-screen p {
+ font-size: 20px;
+}
+
+#game-over-screen button {
+ margin-top: 20px;
+ padding: 10px 20px;
+ font-size: 18px;
+ background: #f53d3d;
+ border: none;
+ border-radius: 5px;
+ color: white;
+ cursor: pointer;
+}
+
+#game-over-screen button:hover {
+ background: #ff5d5d;
 }
 
 @media (max-width: 600px) {
@@ -86,5 +130,9 @@ button:hover {
 
  #scoreboard {
   font-size: 16px;
+ }
+
+ #game-over-screen {
+  width: 80%;
  }
 }
