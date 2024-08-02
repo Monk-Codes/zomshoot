@@ -72,13 +72,13 @@ button:hover {
 }
 
 .zombie {
- width: 150px;
- height: 200px;
+ width: 300px;
+ height: 350px;
  background: url("./assets/zm.svg") no-repeat fixed center center;
  background-size: contain;
  position: absolute;
  cursor: pointer;
- transition: transform 0.2s ease, opacity 0.2s ease;
+ transition: transform 0.4s ease, opacity 0.4s ease;
  z-index: 10;
 }
 

@@ -31,7 +31,7 @@ function startGame() {
   console.log("Background music could not be played:", error);
  });
 
- gameInterval = setInterval(createZombie, 100);
+ gameInterval = setInterval(createZombie, 400);
  timerInterval = setInterval(() => {
   timePlayed++;
   updateTimePlayed();
@@ -89,7 +89,7 @@ function toggleButtons(isStartVisible) {
 function createZombie() {
  const zombie = document.createElement("div");
  zombie.className = "zombie";
- const zombieSize = Math.random() * 50 + 40;
+ const zombieSize = Math.random() * 100 + 37;
  zombie.style.width = `${zombieSize}px`;
  zombie.style.height = `${zombieSize}px`;
  const xPos = Math.random() * (gameArea.offsetWidth - zombieSize);
@@ -103,12 +103,12 @@ function createZombie() {
  });
 
  // Animate zombie appearance
- gsap.fromTo(zombie, { scale: 0, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.8 });
+ gsap.fromTo(zombie, { scale: 0.1, opacity: 0.1 }, { scale: 1, opacity: 1, duration: 3 });
 
  // Animate zombie movement
  gsap.to(zombie, {
-  x: Math.random() * 50 - 25, // Random horizontal movement
-  y: Math.random() * 50 - 25, // Random vertical movement
+  x: Math.random() * 100 - 37, // Random horizontal movement
+  y: Math.random() * 100 - 37, // Random vertical movement
   repeat: -1,
   yoyo: true,
   duration: 1,
@@ -140,7 +140,7 @@ function createZombie() {
   if (gameArea.contains(zombie)) {
    checkGameOver();
   }
- }, 30000);
+ }, 10000);
 }
 
 // Update score
